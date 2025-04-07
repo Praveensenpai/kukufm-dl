@@ -1,72 +1,87 @@
 # 🎧 Kukufm Premium Downloader
 
-A lightning-fast tool to download premium Kukufm content with full metadata preservation. Perfect for offline listening!
+Download your favorite **premium Kukufm shows** fast, with full metadata. Perfect for offline binge-listening.
 
 ## 🌟 Features
-- ▶️ Download full show seasons with single command
-- 🚀 Parallel downloads (3-5x faster)
-- 📁 Automatic metadata embedding (title/author/cover/description)
-- 🔍 Interactive Rich-powered CLI interface
-- ♻️ Auto-cleanup of temporary files
-- 📈 Progress tracking and size estimates
 
-## ⚠️ Prerequisites
-- Active Kukufm **Premium Account** (paid or trial)
-- FFmpeg installed system-wide
-- Cookies from logged-in session
+- ▶️ Download full seasons in one go
+- 🚀 Fast parallel downloads (3-5x speed boost)
+- 🏷️ Auto metadata: title, author, cover, description
+- 🔍 Clean, interactive CLI using `rich`
+- 🧹 Auto-cleans temp files
+- 📈 Shows live progress and file sizes
 
-## 🚀 Quick Start
+## ⚠️ Requirements
 
-## 🐙 Clone Repo
+- A **Premium Kukufm account** (trial or paid)
+- `ffmpeg` installed and added to PATH
+- Logged-in browser cookies
 
-```
+---
+
+## 🚀 Getting Started
+
+### 🐙 Clone the Repo
+
+```bash
 git clone https://github.com/praveensenpai/kukufm-dl.git
 cd kukufm-dl
 ```
 
-## 🛠 Installation
+---
 
-### Install `uv`
+## 🛠 Setup
 
-#### On macOS and Linux:
-```sh
+### 1. Install `uv`
+
+#### macOS / Linux
+```bash
 curl -LsSf https://astral.sh/uv/install.sh | sh
 ```
 
-#### On Windows:
-```sh
+#### Windows
+```powershell
 powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
 ```
 
-### Install Dependencies
-```sh
+---
+
+### 2. Install Dependencies
+
+```bash
 uv sync
 ```
 
-## 🛠 Configure Cookies
-### Rename
+---
+
+## 🍪 Add Your Cookies
+
+### 1. Rename Example File
+
+```bash
+mv cookies_example.txt cookies.txt
 ```
-cookies_example.txt -> cookies.txt
+
+### 2. Get Your Kukufm Cookies
+
+- Login to Kukufm in your browser (Chrome/Firefox)
+- Open Dev Tools (F12 or Ctrl+Shift+I)
+- Go to the **Console** tab
+- Paste and run this:
+  ```js
+  copy(document.cookie)
+  ```
+- Paste that copied text into `cookies.txt`
+
+---
+
+## 💻 How to Use
+
+Run this with required flags:
+
+```bash
+uv run main.py --url https://kukufm.com/show/xyz --from-ep 1 --to-ep 0 --parallel-downloads 3
 ```
-
-## 🔐 Getting Cookies (Required)
-
-- Login to Kukufm in Chrome/Firefox
-
-- Open Developer Tools (F12 or Ctrl+Shift+I)
-
-- Navigate to Console tab
-
-- Run this command:
-```
-copy(document.cookie)
-```
-- Paste contents into cookies.txt (include ALL text)
-
-## 💻 Basic Usage
-
-Follow the interactive prompts:
-
 - Show URL: Full web URL (e.g., https://kukufm.com/show/show-name)
 
 - Start Episode: First episode number to download
@@ -75,28 +90,36 @@ Follow the interactive prompts:
 
 - Parallel Downloads: Recommended 3-5 for best performance
 
-- 📂 Output Structure:
-    ```
-    downloads/
-    └── Show Name/
-        ├── Show Name - Episode 1.m4a
-        ├── Show Name - Episode 2.m4a
-        └── ...
-    ```
 
-## 🚨 Troubleshooting
-### Common Issues
+### 📁 Output Structure
 
-#### Q: Getting 403 Forbidden errors?
-    Check the cookies or check if the login is exist in browser
-    Ensure account has active subscription
-
-#### Q: FFmpeg not found?
-#### Verify installation
 ```
+downloads/
+└── Show Name/
+    ├── Show Name - Episode 1.m4a
+    ├── Show Name - Episode 2.m4a
+    └── ...
+```
+
+---
+
+## 🧯 Troubleshooting
+
+### ❌ 403 Forbidden?
+
+- Double-check your cookies
+- Make sure you're logged in with an active subscription
+
+### ❌ ffmpeg not found?
+
+Check it's installed and in your PATH:
+
+```bash
 ffmpeg -version
 ```
 
-# ⚖️ Legal Notice
+---
 
-#### This tool is intended for personal use only with legally obtained Premium accounts. Distributing downloaded content violates Kukufm's terms of service. Support creators by maintaining an active subscription.
+## ⚖️ Legal Stuff
+
+This tool is for **personal use only** with a valid Kukufm Premium account. Sharing or redistributing content is against Kukufm's terms. Support creators by keeping your subscription active.
