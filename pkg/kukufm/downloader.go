@@ -23,7 +23,7 @@ type KuKuFMDownloader struct {
 func NewKuKuFMDownloader(conf models.InputConf, httpClient, httpDLClient *http.Client, downloadPath string) *KuKuFMDownloader {
 	return &KuKuFMDownloader{
 		Conf:           conf,
-		KuKuFM:         NewKuKuFM(httpDLClient),
+		KuKuFM:         NewKuKuFM(httpClient),
 		M3U8DL:         NewM3U8Downloader(httpClient, httpDLClient),
 		AudioProcessor: NewAudioProcessor(httpDLClient),
 		DownloadPath:   downloadPath,
