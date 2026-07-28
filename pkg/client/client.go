@@ -60,12 +60,8 @@ func GetClient() (*http.Client, error) {
 
 	cookies, err := parseCookiesFile("cookies.txt")
 	if err == nil && len(cookies) > 0 {
-		var kukufmCookies []*http.Cookie
-		for _, c := range cookies {
-			kukufmCookies = append(kukufmCookies, c)
-		}
 		reqURL, _ := http.NewRequest("GET", "https://kukufm.com", nil)
-		jar.SetCookies(reqURL.URL, kukufmCookies)
+		jar.SetCookies(reqURL.URL, cookies)
 	}
 
 	baseTransport := &http.Transport{
@@ -94,10 +90,10 @@ func FetchWithRetry(httpClient *http.Client, url string, maxAttempts int) (*http
 			return nil, rErr
 		}
 		resp, err = httpClient.Do(req)
-		if err == nil && resp.StatusCode < 500 {
-			return resp, nil
-		}
-		if resp != nil {
+		if err == nil {
+			if resp.StatusCode < 500 {
+				return resp, nil
+			}
 			resp.Body.Close()
 		}
 		time.Sleep(3 * time.Second)

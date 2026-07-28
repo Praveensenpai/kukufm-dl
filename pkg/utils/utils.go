@@ -7,19 +7,16 @@ import (
 	"strings"
 )
 
-// HumanReadableSize formats a byte size into a human readable string (KB, MB, GB, etc.)
+// HumanReadableSize formats a byte size into a human readable string.
 func HumanReadableSize(bytes int64) string {
-	const unit = 1024.0
-	if bytes < 1024 {
-		return fmt.Sprintf("%d B", bytes)
+	units := []string{"B", "KB", "MB", "GB", "TB"}
+	size := float64(bytes)
+	idx := 0
+	for size >= 1024.0 && idx < len(units)-1 {
+		size /= 1024.0
+		idx++
 	}
-	div, exp := int64(unit), 0
-	for n := bytes / unit; n >= 1; n /= unit {
-		div *= unit
-		exp++
-	}
-	units := []string{"KB", "MB", "GB", "TB"}
-	return fmt.Sprintf("%.2f %s", float64(bytes)/float64(div/1024), units[exp])
+	return fmt.Sprintf("%.2f %s", size, units[idx])
 }
 
 // MakeDirs creates a directory hierarchy if it doesn't already exist.
@@ -27,7 +24,7 @@ func MakeDirs(path string) error {
 	return os.MkdirAll(path, 0755)
 }
 
-// DeleteAllTempFolders recursively searches and removes all folders named "temp".
+// DeleteAllTempFolders recursively removes all folders named "temp".
 func DeleteAllTempFolders(rootDir string) error {
 	return filepath.Walk(rootDir, func(path string, info os.FileInfo, err error) error {
 		if err != nil {
