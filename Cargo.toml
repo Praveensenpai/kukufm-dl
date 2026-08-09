@@ -3,6 +3,7 @@ name = "kukufm-dl"
 version = "0.4.1"
 edition = "2021"
 description = "A lightning-fast Rust tool to download premium Kukufm content"
+license = "MIT"
 
 [dependencies]
 clap = { version = "4.5", features = ["derive"] }

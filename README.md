@@ -175,6 +175,10 @@ Pass your raw browser cookie string directly in single quotes:
 
 ---
 
-## ⚖️ License
+## ⚠️ Legal Disclaimer
 
-For personal offline listening only. Respect content creators and KukuFM terms of service.
+`kukufm-dl` is developed strictly for personal, educational, and offline archival purposes.
+
+- **No Liability**: The developer(s) and contributor(s) accept no responsibility or liability for any misuse of this software, account suspension, copyright infringement, or violation of third-party Terms of Service.
+- **User Responsibility**: Users are solely responsible for their actions and for ensuring compliance with all applicable local, national, and international laws, regulations, and third-party terms of service.
+- **Intellectual Property**: All product names, logos, audio content, show titles, and trademarks are property of their respective owners (KukuFM). This software does not host, stream, bypass digital rights management (DRM) protections, or redistribute copyrighted media.
