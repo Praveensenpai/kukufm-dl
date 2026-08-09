@@ -115,7 +115,7 @@ impl Downloader {
                 let pb = multi.add(ProgressBar::new(100));
                 pb.set_style(
                     ProgressStyle::default_bar()
-                        .template(" {spinner:.cyan} [{elapsed_precise}] [{bar:25.cyan/blue}] {pos}% {msg}")
+                        .template(" {spinner:.cyan} [{elapsed_precise}] [{bar:25.cyan/blue}] {percent:>3}% {msg}")
                         .unwrap()
                         .progress_chars("━➤ "),
                 );
