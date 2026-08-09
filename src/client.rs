@@ -3,6 +3,7 @@ use reqwest::cookie::Jar;
 use reqwest::header::{HeaderMap, HeaderValue, ACCEPT, ACCEPT_LANGUAGE, USER_AGENT};
 use reqwest::{Client, Url};
 use std::fs;
+use std::path::Path;
 use std::sync::Arc;
 use std::time::Duration;
 
@@ -12,20 +13,83 @@ pub struct HttpClientPair {
 }
 
 impl HttpClientPair {
-    pub fn new() -> Result<Self> {
+    pub async fn new(cookie_input: Option<&str>, cookie_file: Option<&Path>) -> Result<Self> {
         let jar = Arc::new(Jar::default());
         let site_url = "https://kukufm.com".parse::<Url>()?;
 
-        if let Ok(content) = fs::read_to_string("cookies.txt") {
-            for pair in content.split(';') {
+        let downloader = Client::builder()
+            .timeout(Duration::from_secs(180))
+            .build()
+            .context("Failed to build downloader HTTP client")?;
+
+        let parse_and_add_cookies = |raw_text: &str, jar: &Arc<Jar>, site_url: &Url| -> usize {
+            let mut added = 0;
+            for pair in raw_text.split(';') {
                 let pair = pair.trim();
-                if pair.is_empty() {
+                if pair.is_empty() || pair.starts_with('#') {
                     continue;
                 }
                 if let Some((name, val)) = pair.split_once('=') {
                     let cookie_line = format!("{}={}; Domain=kukufm.com; Path=/", name.trim(), val.trim());
-                    jar.add_cookie_str(&cookie_line, &site_url);
+                    jar.add_cookie_str(&cookie_line, site_url);
+                    added += 1;
                 }
+            }
+            added
+        };
+
+        if let Some(cookie_str) = cookie_input {
+            if cookie_str.starts_with("http://") || cookie_str.starts_with("https://") {
+                println!("🌐 Fetching cookies from URL: {}", cookie_str);
+                let resp_text = downloader
+                    .get(cookie_str)
+                    .send()
+                    .await
+                    .with_context(|| format!("Failed to fetch cookies from URL: {}", cookie_str))?
+                    .text()
+                    .await
+                    .context("Failed to read response body for cookie URL")?;
+                let count = parse_and_add_cookies(&resp_text, &jar, &site_url);
+                println!("🔑 Loaded {} cookies from URL", count);
+            } else {
+                let count = parse_and_add_cookies(cookie_str, &jar, &site_url);
+                if count > 0 {
+                    println!("🔑 Loaded {} cookies from --cookie argument", count);
+                } else {
+                    eprintln!("⚠️ Warning: Provided --cookie string yielded no key=value pairs");
+                }
+            }
+        } else {
+            let target_file = cookie_file.unwrap_or_else(|| Path::new("cookies.txt"));
+            let file_str = target_file.to_string_lossy();
+
+            if file_str.starts_with("http://") || file_str.starts_with("https://") {
+                println!("🌐 Fetching cookies from URL: {}", file_str);
+                let resp_text = downloader
+                    .get(file_str.as_ref())
+                    .send()
+                    .await
+                    .with_context(|| format!("Failed to fetch cookies from URL: {}", file_str))?
+                    .text()
+                    .await
+                    .context("Failed to read response body for cookie URL")?;
+                let count = parse_and_add_cookies(&resp_text, &jar, &site_url);
+                println!("🔑 Loaded {} cookies from URL", count);
+            } else if target_file.exists() {
+                let content = fs::read_to_string(target_file)
+                    .with_context(|| format!("Failed to read cookie file: {}", target_file.display()))?;
+                let count = parse_and_add_cookies(&content, &jar, &site_url);
+                if count > 0 {
+                    println!("🔑 Loaded {} cookies from {}", count, target_file.display());
+                } else {
+                    eprintln!("⚠️ Warning: Cookie file '{}' is empty or contains no valid cookies", target_file.display());
+                }
+            } else if cookie_file.is_some() {
+                anyhow::bail!("Specified cookie file not found: {}", target_file.display());
+            } else {
+                eprintln!("⚠️ Warning: 'cookies.txt' not found in current directory.");
+                eprintln!("   Downloading premium content requires cookies.");
+                eprintln!("   Provide 'cookies.txt' or use '--cookie-file <PATH_OR_URL>' / '--cookie \"<STRING_OR_URL>\"'.");
             }
         }
 

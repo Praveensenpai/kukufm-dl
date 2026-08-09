@@ -33,6 +33,14 @@ struct Cli {
     /// Parallel episode download workers
     #[arg(long, default_value_t = 1)]
     parallel_downloads: usize,
+
+    /// Path to cookie file (default: cookies.txt)
+    #[arg(short = 'c', long)]
+    cookie_file: Option<PathBuf>,
+
+    /// Raw cookie string (e.g. "session=...; token=...")
+    #[arg(long)]
+    cookie: Option<String>,
 }
 
 #[tokio::main]
@@ -56,7 +64,7 @@ async fn main() -> Result<()> {
     make_dirs(&download_dir)?;
     let _ = delete_all_temp_folders(&download_dir);
 
-    let clients = HttpClientPair::new()?;
+    let clients = HttpClientPair::new(cli.cookie.as_deref(), cli.cookie_file.as_deref()).await?;
     let config = DownloaderConfig {
         show_url: cli.url,
         from_ep: cli.from_ep,

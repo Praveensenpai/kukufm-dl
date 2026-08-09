@@ -48,15 +48,17 @@ jobs:
       - name: Package binary (Unix)
         if: matrix.os != 'windows-latest'
         run: |
+          cp cookies_example.txt README.md target/${{ matrix.target }}/release/
           cd target/${{ matrix.target }}/release
-          tar -czvf ../../../${{ matrix.asset_name }} ${{ matrix.artifact_name }}
+          tar -czvf ../../../${{ matrix.asset_name }} ${{ matrix.artifact_name }} cookies_example.txt README.md
 
       - name: Package binary (Windows)
         if: matrix.os == 'windows-latest'
         shell: powershell
         run: |
+          Copy-Item cookies_example.txt, README.md target/${{ matrix.target }}/release/
           cd target/${{ matrix.target }}/release
-          Compress-Archive -Path ${{ matrix.artifact_name }} -DestinationPath ../../../${{ matrix.asset_name }}
+          Compress-Archive -Path ${{ matrix.artifact_name }}, cookies_example.txt, README.md -DestinationPath ../../../${{ matrix.asset_name }}
 
       - name: Upload Release Asset
         uses: softprops/action-gh-release@v2

@@ -9,72 +9,115 @@ A lightning-fast, multi-threaded CLI downloader for **KukuFM** audio content, wr
 - **Blazing Fast**: Multi-threaded parallel stream & segment downloads.
 - **Rich Terminal UI**: Animated progress bars and status indicators powered by `indicatif`.
 - **Full Metadata**: Embedded ID3/MP4 metadata (Title, Artist, Album, Cover Art).
+- **Flexible Cookie Sources**: Load cookies from a local `cookies.txt` file, a remote HTTP/HTTPS URL, or an inline cookie string.
 - **Cross-Platform**: Pre-built binaries for Linux, macOS, and Windows.
+
+---
+
+## 📦 What's Included in Release Archives
+
+Each downloadable release archive contains:
+- `kukufm-dl` / `kukufm-dl.exe` (Main executable binary)
+- `cookies_example.txt` (Sample cookies template with setup instructions)
+- `README.md` (Documentation)
 
 ---
 
 ## 📦 Getting Started
 
-### Step 1: Download & Extract Binary
+### Step 1: Download & Extract Archive
 
 1. Go to **[Releases](https://github.com/Praveensenpai/kukufm-dl/releases)** and download the archive for your OS:
    - **Linux**: `kukufm-dl-linux-amd64.tar.gz`
    - **macOS (Apple Silicon)**: `kukufm-dl-macos-arm64.tar.gz`
    - **macOS (Intel)**: `kukufm-dl-macos-x86_64.tar.gz`
    - **Windows**: `kukufm-dl-windows-amd64.zip`
-2. Extract the downloaded archive (`.tar.gz` or `.zip`).
-3. Open Terminal / Command Prompt inside the extracted folder.
+2. Extract the downloaded `.tar.gz` or `.zip` file into a folder.
+3. Open Terminal / Command Prompt / PowerShell inside that extracted folder.
 
-*(Or build from source with `cargo build --release`)*
+*(Or build from source: `cargo build --release`)*
 
 ---
 
-### Step 2: Cookie Setup
+### Step 2: Cookie Setup (Choose Option A, B, or C)
 
-1. Copy `cookies_example.txt` to `cookies.txt` (or create a file named `cookies.txt` in the same folder as the binary):
-   ```bash
-   cp cookies_example.txt cookies.txt
-   ```
-2. Log in to [KukuFM](https://kukufm.com) in your browser.
-3. Open Developer Tools (`F12`), switch to the **Console** tab, and run:
+KukuFM requires active subscription cookies to stream and download premium content. You can provide cookies using any of the following methods:
+
+#### Option A: Local `cookies.txt` File (Default / Recommended)
+
+1. Rename `cookies_example.txt` to `cookies.txt` (or create `cookies.txt` in the same folder as `kukufm-dl`).
+2. Log in to [KukuFM](https://kukufm.com) in your web browser.
+3. Open **Developer Tools** (`F12` or `Ctrl+Shift+I` / `Cmd+Option+I`).
+4. Switch to the **Console** tab and run:
    ```js
    copy(document.cookie)
    ```
-4. Paste the copied text into `cookies.txt` and save.
+5. Open `cookies.txt`, paste your copied cookie string, and save the file. `kukufm-dl` will detect it automatically!
+
+#### Option B: Remote Cookie URL (`--cookie-file <URL>` or `-c <URL>`)
+
+If your cookies are hosted online (e.g. Pastebin, Github Gist, or private server), pass the HTTP/HTTPS URL directly:
+```bash
+./kukufm-dl --url https://kukufm.com/show/slug -c https://example.com/my_cookies.txt
+```
+
+#### Option C: Inline Cookie String (`--cookie "<STRING>"`)
+
+Pass your raw browser cookie string directly in the command line:
+```bash
+./kukufm-dl --url https://kukufm.com/show/slug --cookie "session=xyz123; token=abc456"
+```
 
 ---
 
-## 🚀 Usage
+## 🚀 Usage Examples
 
-Run the command in your terminal/Command Prompt inside the binary folder:
+### Standard (Using local `cookies.txt` in the same directory):
 
-### Linux / macOS:
+#### Linux / macOS:
 ```bash
 ./kukufm-dl --url https://kukufm.com/show/revenge-of-my-fake-boyfriend-8 --from-ep 1 --to-ep 10 --parallel-downloads 3
 ```
 
-### Windows (Command Prompt / PowerShell):
+#### Windows (Command Prompt / PowerShell):
 ```powershell
 .\kukufm-dl.exe --url https://kukufm.com/show/revenge-of-my-fake-boyfriend-8 --from-ep 1 --to-ep 10 --parallel-downloads 3
 ```
 
 ---
 
+### Advanced (Using Custom File, Remote URL, or Direct Cookie):
+
+```bash
+# Custom local file path
+./kukufm-dl --url https://kukufm.com/show/slug -c /path/to/my_cookies.txt
+
+# Remote Cookie URL
+./kukufm-dl --url https://kukufm.com/show/slug -c https://raw.githubusercontent.com/user/repo/main/cookies.txt
+
+# Inline Cookie string
+./kukufm-dl --url https://kukufm.com/show/slug --cookie "session=xyz123; token=abc456"
+```
+
+---
+
 ## 📖 Command Arguments
 
-| Parameter | Example Value | Description |
-| :--- | :--- | :--- |
-| `--url` | `https://kukufm.com/show/slug` | **Required.** Full web URL of the show. |
-| `--from-ep` | `1` | Start episode number (default: `1`). |
-| `--to-ep` | `10` | End episode number (set `0` for all remaining). |
-| `--parallel-downloads` | `3` | Concurrent episode downloads (recommended: `3` to `5`). |
+| Parameter | Short | Default | Description |
+| :--- | :---: | :---: | :--- |
+| `--url` | | *Required* | Full web URL of the KukuFM show (`https://kukufm.com/show/...`). |
+| `--from-ep` | | `1` | Start episode number (>= 1). |
+| `--to-ep` | | `0` | End episode number (`0` downloads all remaining episodes). |
+| `--parallel-downloads` | | `1` | Concurrent episode download threads (recommended: `3` to `5`). |
+| `--cookie-file` | `-c` | `cookies.txt` | Local file path **OR** remote HTTP/HTTPS URL containing KukuFM cookies. |
+| `--cookie` | | | Raw cookie string **OR** remote HTTP/HTTPS URL directly. |
 
 ---
 
 ## ⚠️ Requirements
 
-- `ffmpeg` installed and available in system `PATH`.
-- Active KukuFM subscription cookies in `cookies.txt`.
+- `ffmpeg` installed and available in your system `PATH`.
+- Active KukuFM subscription cookies via local `cookies.txt`, remote URL, or `--cookie` flag.
 
 ---
 
