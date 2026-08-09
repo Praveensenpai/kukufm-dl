@@ -48,7 +48,10 @@ impl KuKuClient {
     }
 
     pub async fn get_show(&self, slug: &str) -> Result<ShowInfo> {
-        let url = format!("https://kukufm.com/api/v2.1/channels/{}/episodes?lang=english&page=1", slug);
+        let url = format!(
+            "https://kukufm.com/api/v2.3/channels/{}/episodes/?lang=english&page=1&page_size=50",
+            slug
+        );
         let res = self.fetch_json(&url).await?;
 
         let show = res.show.context("Missing 'show' key in API response")?;
@@ -70,14 +73,14 @@ impl KuKuClient {
         to_ep: usize,
     ) -> Result<(ShowInfo, Vec<Episode>)> {
         let show = self.get_show(slug).await?;
-        let per_page = 10;
+        let per_page = 50;
         let mut current_page = if from_ep > 0 { ((from_ep - 1) / per_page) + 1 } else { 1 };
 
         let mut episodes = Vec::new();
 
         loop {
             let url = format!(
-                "https://kukufm.com/api/v2.1/channels/{}/episodes?lang=english&page={}",
+                "https://kukufm.com/api/v2.3/channels/{}/episodes/?lang=english&page={}&page_size=50",
                 slug, current_page
             );
 
@@ -105,9 +108,18 @@ impl KuKuClient {
                     break;
                 }
 
-                let hls = match ep.content.and_then(|c| c.hls_url) {
-                    Some(u) if !u.is_empty() => u,
-                    _ => continue,
+                let stream_url = match ep.content.as_ref() {
+                    Some(c) => c
+                        .premium_audio_url
+                        .as_deref()
+                        .filter(|u| !u.is_empty())
+                        .or_else(|| c.hls_url.as_deref().filter(|u| !u.is_empty())),
+                    None => None,
+                };
+
+                let hls = match stream_url {
+                    Some(u) => u.to_string(),
+                    None => continue,
                 };
 
                 episodes.push(Episode {
