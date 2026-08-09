@@ -54,7 +54,6 @@ pub(crate) struct RawShow {
 #[derive(Debug, Deserialize)]
 pub(crate) struct RawContent {
     pub hls_url: Option<String>,
-    pub premium_audio_url: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
