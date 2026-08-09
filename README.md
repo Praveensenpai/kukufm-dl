@@ -94,6 +94,9 @@ You can run it directly from the project root:
 
 KukuFM requires active subscription cookies to stream and download premium content.
 
+> [!TIP]
+> **Shell Quoting Tip**: When passing `--cookie` directly on the command line in Linux/macOS, always enclose the cookie string in **single quotes** (`'...'`) instead of double quotes (`"..."`). Double quotes allow shell expansion of special characters like `$`, `!`, or `&` inside cookie values.
+
 #### Option A: Local `cookies.txt` File (Default / Recommended)
 
 1. Rename `cookies_example.txt` to `cookies.txt` (or create `cookies.txt` in the same folder as `kukufm-dl`).
@@ -112,11 +115,11 @@ If your cookies are hosted online (e.g. Pastebin, Github Gist, or private server
 ./kukufm-dl --url https://kukufm.com/show/slug -c https://example.com/my_cookies.txt
 ```
 
-#### Option C: Inline Cookie String (`--cookie "<STRING>"`)
+#### Option C: Inline Cookie String (`--cookie '<STRING>'`)
 
-Pass your raw browser cookie string directly in the command line:
+Pass your raw browser cookie string directly in single quotes:
 ```bash
-./kukufm-dl --url https://kukufm.com/show/slug --cookie "session=xyz123; token=abc456"
+./kukufm-dl --url https://kukufm.com/show/slug --cookie 'session=xyz123; token=abc456'
 ```
 
 ---
@@ -146,8 +149,8 @@ Pass your raw browser cookie string directly in the command line:
 # Remote Cookie URL
 ./kukufm-dl --url https://kukufm.com/show/slug -c https://raw.githubusercontent.com/user/repo/main/cookies.txt
 
-# Inline Cookie string
-./kukufm-dl --url https://kukufm.com/show/slug --cookie "session=xyz123; token=abc456"
+# Inline Cookie string (use single quotes '...' to avoid shell variable expansion!)
+./kukufm-dl --url https://kukufm.com/show/slug --cookie 'session=xyz123; token=abc456'
 ```
 
 ---
@@ -161,7 +164,7 @@ Pass your raw browser cookie string directly in the command line:
 | `--to-ep` | | `0` | End episode number (`0` downloads all remaining episodes). |
 | `--parallel-downloads` | | `1` | Concurrent episode download threads (recommended: `3` to `5`). |
 | `--cookie-file` | `-c` | `cookies.txt` | Local file path **OR** remote HTTP/HTTPS URL containing KukuFM cookies. |
-| `--cookie` | | | Raw cookie string **OR** remote HTTP/HTTPS URL directly. |
+| `--cookie` | | | Raw cookie string **OR** remote HTTP/HTTPS URL directly (wrap string in `'...'`). |
 
 ---
 
