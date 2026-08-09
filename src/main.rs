@@ -16,8 +16,12 @@ use utils::{delete_all_temp_folders, make_dirs};
 
 /// Lightning-fast Kukufm Episode Downloader
 #[derive(Parser, Debug)]
-#[command(author, version, about)]
+#[command(author, version, about, disable_version_flag = true)]
 struct Cli {
+    /// Print version information
+    #[arg(short = 'v', short_alias = 'V', long = "version", action = clap::ArgAction::Version)]
+    version: Option<bool>,
+
     /// Show URL (e.g. https://kukufm.com/show/slug)
     #[arg(long)]
     url: String,
