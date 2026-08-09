@@ -1,6 +1,7 @@
 use serde::Deserialize;
 use std::path::PathBuf;
 
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct ShowInfo {
     pub title: String,
@@ -10,6 +11,7 @@ pub struct ShowInfo {
     pub total_pages: usize,
 }
 
+#[allow(dead_code)]
 #[derive(Debug, Clone)]
 pub struct Episode {
     pub show_title: String,
