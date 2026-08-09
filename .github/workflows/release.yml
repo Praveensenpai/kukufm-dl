@@ -24,7 +24,7 @@ jobs:
             target: aarch64-apple-darwin
             artifact_name: kukufm-dl
             asset_name: kukufm-dl-macos-arm64.tar.gz
-          - os: macos-13
+          - os: macos-latest
             target: x86_64-apple-darwin
             artifact_name: kukufm-dl
             asset_name: kukufm-dl-macos-x86_64.tar.gz
@@ -56,8 +56,9 @@ jobs:
         if: matrix.os == 'windows-latest'
         shell: powershell
         run: |
-          Copy-Item cookies_example.txt, README.md target/${{ matrix.target }}/release/
-          cd target/${{ matrix.target }}/release
+          Copy-Item -Path cookies_example.txt -Destination target/${{ matrix.target }}/release/
+          Copy-Item -Path README.md -Destination target/${{ matrix.target }}/release/
+          Set-Location target/${{ matrix.target }}/release
           Compress-Archive -Path ${{ matrix.artifact_name }}, cookies_example.txt, README.md -DestinationPath ../../../${{ matrix.asset_name }}
 
       - name: Upload Release Asset
