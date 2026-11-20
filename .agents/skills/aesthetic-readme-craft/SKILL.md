@@ -9,7 +9,7 @@ description: >-
 
 # `aesthetic-readme-craft` Skill: Aesthetic & Production-Grade READMEs
 
-Standardizes the creation and refinement of GitHub `README.md` files into aesthetic, high-impact, visual masterpieces that immediately captivate developers and users. Inspired by the signature design language of Praveensenpai's repositories (`kbuild`, `nielsen-tv-enabler`, `ryoiki`, `kotonoha`, `jpsan`, `toss-rs`).
+Standardizes the creation and refinement of GitHub `README.md` files into aesthetic, high-impact, visual masterpieces that immediately captivate developers and users. Inspired by the signature design language of Praveensenpai's repositories (`nielsen-tv-enabler`, `ryoiki`, `kotonoha`, `jpsan`, `toss-rs`).
 
 ---
 
@@ -41,7 +41,7 @@ Praveensenpai repositories follow one of two polished layout styles depending on
 - Followed immediately by an Overview with a visual diagram or Mermaid flow
 
 ### Archetype B: The High-Impact Left-Aligned Powerhouse (CLIs, Compilers, Tools)
-*Exemplified by [`kbuild`](https://github.com/Praveensenpai/kbuild), [`kotonoha`](https://github.com/Praveensenpai/kotonoha), and [`jpsan`](https://github.com/Praveensenpai/jpsan)*.
+*Exemplified by [`karakuri`](https://github.com/Praveensenpai/karakuri), [`kotonoha`](https://github.com/Praveensenpai/kotonoha), and [`jpsan`](https://github.com/Praveensenpai/jpsan)*.
 
 - Clean `# <Emoji> <Name> [(<Kanji/Romaji>)] [— <Subtitle>]` header
 - Blockquote bold one-liner: `> **<High-impact proposition.>**`
